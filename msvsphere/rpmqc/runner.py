@@ -31,7 +31,7 @@ def load_inspections(cfg: Config) -> List[PkgBaseInspector]:
     return inspections
 
 
-def run_rpm_inspections(cfg: Config, rpm_paths: Iterable):
+def run_rpm_inspections(cfg: Config, rpm_paths: Iterable) -> bool:
     ts = rpm.TransactionSet('', rpm._RPMVSF_NOSIGNATURES)
     inspectors = load_inspections(cfg)
     reporter = ReporterTap()
@@ -47,3 +47,4 @@ def run_rpm_inspections(cfg: Config, rpm_paths: Iterable):
             pkg_reporter.print_plan()
             reporter.end_subtest(pkg_reporter)
     reporter.print_plan()
+    return reporter.failed_count == 0
