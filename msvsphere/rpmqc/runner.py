@@ -1,3 +1,4 @@
+import os.path
 from contextlib import closing
 from typing import Iterable, List
 
@@ -33,10 +34,16 @@ def load_inspections(cfg: Config) -> List[PkgBaseInspector]:
 def run_rpm_inspections(cfg: Config, rpm_paths: Iterable):
     ts = rpm.TransactionSet('', rpm._RPMVSF_NOSIGNATURES)
     inspectors = load_inspections(cfg)
+    reporter = ReporterTap()
+    reporter.print_header()
     for rpm_path in rpm_paths:
+        rpm_basename = os.path.basename(rpm_path)
         with closing(rpm.fd(rpm_path, 'r')) as fd:
             hdr = ts.hdrFromFdno(fd)
             pkg = RPMPackage(fd, hdr, rpm_path)
-            reporter = ReporterTap()
+            pkg_reporter = reporter.init_subtest(rpm_basename)
             for inspector in inspectors:
-                inspector.inspect(pkg, reporter)
+                inspector.inspect(pkg, pkg_reporter)
+            pkg_reporter.print_plan()
+            reporter.end_subtest(pkg_reporter)
+    reporter.print_plan()

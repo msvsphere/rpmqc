@@ -5,10 +5,11 @@ with open('README.md', 'r') as fd:
 
 setup(
     name='rpmqc',
-    version='0.0.1',
+    version='0.0.2',
     author='Eugene Zamriy',
     author_email='ezamriy@msvsphere-os.ru',
     description='The RPM packages quality control tool',
+    license='GPL-2.0-or-later',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/msvsphere/rpmqc',

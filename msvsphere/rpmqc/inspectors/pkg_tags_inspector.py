@@ -14,19 +14,21 @@ class PkgTagsInspectorInspector(PkgBaseInspector):
 
     def inspect(self, pkg: RPMPackage, reporter: ReporterTap):
         for tag_name, tag_id, expected in self._iter_tags():
-            test_case = f'{tag_name} RPM tag value is {expected}'
             value = pkg.hdr[tag_id]
             if isinstance(expected, re.Pattern):
                 rslt = expected.match(value)
+                expected_str = f'regex:{expected.pattern}'
             else:
                 rslt = (value == expected)
+                expected_str = expected
+            test_case = f'{tag_name} RPM tag value is {expected_str}'
             if rslt:
                 reporter.passed(test_case)
             else:
                 reporter.failed(test_case, {
                     'message': f'unexpected {tag_name} RPM tag value',
                     'got': value,
-                    'expected': expected
+                    'expected': expected_str
                 })
 
     def _iter_tags(self):
