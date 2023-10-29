@@ -4,10 +4,10 @@ import rpm
 
 from .pkg_base_inspector import *
 
-__all__ = ['PkgTagsInspectorInspector']
+__all__ = ['PkgTagsInspector']
 
 
-class PkgTagsInspectorInspector(PkgBaseInspector):
+class PkgTagsInspector(PkgBaseInspector):
 
     def __init__(self, cfg: Config):
         self.cfg = cfg

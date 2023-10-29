@@ -1,12 +1,12 @@
 from .pkg_base_inspector import *
 
-__all__ = ['PkgSignatureInspectorInspector']
+__all__ = ['PkgSignatureInspector']
 
 
-class PkgSignatureInspectorInspector(PkgBaseInspector):
+class PkgSignatureInspector(PkgBaseInspector):
 
     """
-    Verifyies an RPM package PGP signature and a digest algorithm.
+    Verifies an RPM package PGP signature and a digest algorithm.
     """
 
     def __init__(self, cfg: Config):

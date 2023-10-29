@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Exit with a non-zero exit code if some tests failed.
 - Use pytest-compatible exit codes.
 
+### Fixed
+
+- Remove second "Inspector" word from the inspector class names.
+
 
 ## [0.0.2] - 2023-10-28
 
