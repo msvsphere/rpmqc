@@ -49,4 +49,5 @@ def run_rpm_inspections(cfg: Config, rpm_paths: Iterable) -> bool:
             pkg_reporter.print_plan()
             reporter.end_subtest(pkg_reporter)
     reporter.print_plan()
+    reporter.print_summary()
     return reporter.failed_count == 0

@@ -90,6 +90,16 @@ class ReporterTap:
     def print_header(self):
         self._output.write(f'TAP version {self._tap_version}\n')
 
+    def print_summary(self):
+        counters = ((self.passed_count, 'Passed'),
+                    (self.skipped_count, 'Skipped'),
+                    (self.failed_count, 'Failed'))
+        for counter, label in counters:
+            if not counter:
+                continue
+            self._output.write(f'{self._indent}# {label} {counter} of '
+                               f'{self._i} tests\n')
+
     @property
     def _indent(self) -> str:
         return ' ' * self._offset
