@@ -1,7 +1,8 @@
-import os.path
 from contextlib import closing
+import os.path
 from typing import Iterable, List
 
+import createrepo_c
 import rpm
 
 from .config import Config
@@ -9,7 +10,7 @@ from .inspectors.pkg_base_inspector import PkgBaseInspector
 from .reporter import ReporterTap
 from .rpm_package import RPMPackage
 
-__all__ = ['run_rpm_inspections']
+__all__ = ['run_repo_inspections', 'run_rpm_inspections']
 
 
 def load_inspections(cfg: Config) -> List[PkgBaseInspector]:
@@ -51,3 +52,21 @@ def run_rpm_inspections(cfg: Config, rpm_paths: Iterable) -> bool:
     reporter.print_plan()
     reporter.print_summary()
     return reporter.failed_count == 0
+
+
+def run_repo_inspections(cfg: Config, repo_path: str):
+    repomd_xml_path = os.path.join(repo_path, 'repodata/repomd.xml')
+    repomd = createrepo_c.Repomd()
+    createrepo_c.xml_parse_repomd(repomd_xml_path, repomd)
+    primary_path = None
+    for rec in repomd.records:
+        if rec.type == 'primary':
+            primary_path = os.path.join(repo_path, rec.location_href)
+            break
+    packages = []
+    def pkg_callback(pkg):
+        packages.append(pkg.location_href)
+    createrepo_c.xml_parse_primary(primary_path, pkgcb=pkg_callback,
+                                   do_files=False)
+    return run_rpm_inspections(cfg, (os.path.join(repo_path, p)
+                                     for p in packages))

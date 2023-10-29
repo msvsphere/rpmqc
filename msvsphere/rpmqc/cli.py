@@ -6,7 +6,7 @@ import traceback
 from . import __version__
 from .config import Config
 from .file_utils import normalize_path
-from .runner import run_rpm_inspections
+from .runner import run_repo_inspections, run_rpm_inspections
 
 
 class ExitCodes(IntEnum):
@@ -46,15 +46,27 @@ def init_arg_parser() -> ArgParser:
     """
     parser = ArgParser(prog='rpmqc',
                        description='RPM packages quality control tool')
-    parser.add_argument('-c', '--config', help='configuration file path',
-                        required=True)
     parser.add_argument('--version', action='version',
                         version=f'%(prog)s {__version__}')
     commands = parser.add_subparsers(dest='command', required=True,
                                      title='inspection commands')
+    # repository inspection subcommand
+    inspect_repo_cmd = commands.add_parser(
+        'inspect-repo', help='inspect a YUM/DNF repository',
+        description='Runs inspections for the entire YUM/DNF repository'
+    )
+    inspect_repo_cmd.add_argument('-c', '--config', required=True,
+                                  help='configuration file path')
+    inspect_repo_cmd.add_argument('repo_path', metavar='REPO_PATH',
+                                  type=normalize_path,
+                                  help='path to a repository under test')
     # RPM inspection subcommand
-    inspect_rpm_cmd = commands.add_parser('inspect-rpm',
-                                          help='inspect an RPM package')
+    inspect_rpm_cmd = commands.add_parser(
+        'inspect-rpm', help='inspect an RPM package',
+        description='Runs inspections for a specified RPM package'
+    )
+    inspect_rpm_cmd.add_argument('-c', '--config', required=True,
+                                 help='configuration file path')
     inspect_rpm_cmd.add_argument('rpm_path', metavar='RPM_PATH', nargs='+',
                                  type=normalize_path,
                                  help='path to RPM(s) under test')
@@ -67,7 +79,9 @@ def main():
     cfg = Config(args.config)
     success = False
     try:
-        if args.command == 'inspect-rpm':
+        if args.command == 'inspect-repo':
+            success = run_repo_inspections(cfg, args.repo_path)
+        elif args.command == 'inspect-rpm':
             success = run_rpm_inspections(cfg, args.rpm_path)
     except KeyboardInterrupt:
         sys.stderr.write('rpmqc: interrupted by user\n')

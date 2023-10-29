@@ -66,6 +66,14 @@ all inspections are optional and will be performed if a corresponding
 configuration file option is set.
 
 
+## Usage
+
+Currently, rpmqc supports only two modes: single (or multiple) RPM packages
+checking (`inspect-rpm`) and an entire repository checking (`inspect-repo`).
+For usage instructions see `rpmqc inspect-rpm --help` and
+`rpmqc inspect-repo --help`, respectively.
+
+
 ## License
 
 rpmqc is available under the terms of the
