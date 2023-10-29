@@ -2,6 +2,12 @@
 
 The RPM packages quality control tool.
 
+Ideologically, rpmqc is similar to [rpmlint](https://github.com/rpm-software-management/rpmlint),
+but they solve slightly different tasks: rpmlint is an awesome tool for checking
+an RPM package for common errors (a packager's tool), while rpmqc is designed
+to quickly check an entire repository/compose for typical release manager's
+errors like missing signatures or wrong branding.
+
 
 ## Configuration
 
