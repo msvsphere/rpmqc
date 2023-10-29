@@ -5,7 +5,7 @@ with open('README.md', 'r') as fd:
 
 setup(
     name='rpmqc',
-    version='0.0.2',
+    version='0.0.3',
     author='Eugene Zamriy',
     author_email='ezamriy@msvsphere-os.ru',
     description='The RPM packages quality control tool',

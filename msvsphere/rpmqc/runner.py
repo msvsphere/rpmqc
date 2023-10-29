@@ -25,8 +25,10 @@ def load_inspections(cfg: Config) -> List[PkgBaseInspector]:
     # TODO: use dynamical loading via pkgutil
     inspections = []
     from .inspectors.pkg_signature_inspector import PkgSignatureInspector
+    from .inspectors.pkg_ima_inspector import PkgIMASignatureInspector
     from .inspectors.pkg_tags_inspector import PkgTagsInspector
     inspections.append(PkgSignatureInspector(cfg))
+    inspections.append(PkgIMASignatureInspector(cfg))
     inspections.append(PkgTagsInspector(cfg))
     return inspections
 

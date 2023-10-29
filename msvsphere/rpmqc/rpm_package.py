@@ -3,6 +3,9 @@ from typing import Tuple, Union
 
 import rpm
 
+__all__ = ['RPMPackage']
+
+
 class RPMPackage:
 
     def __init__(self, fd: rpm.fd, hdr: rpm.hdr, path: str):
