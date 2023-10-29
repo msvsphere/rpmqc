@@ -29,7 +29,7 @@ ConfigSchema = Schema({
                 error='IMA certificate file does not exist'
             )
         },
-        Optional('tags'): {
+        Optional('tags', default={}): {
             Optional('buildhost'): StrOrRegex,
             Optional('packager'): StrOrRegex,
             Optional('vendor'): StrOrRegex
