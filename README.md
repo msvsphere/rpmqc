@@ -9,6 +9,18 @@ to quickly check an entire repository/compose for typical release manager's
 errors like missing signatures or wrong branding.
 
 
+## Features
+
+* [TAP](https://testanything.org/) output format for easy integration into
+  CI/CD pipelines.
+* Performs checks on a single RPM package, multiple RPM packages or on an
+  entire YUM/DNF repository.
+* Supported inspections:
+  * RPM package PGP signature
+  * RPM package IMA signatures
+  * RPM package tags
+
+
 ## Install
 
 All requirements are available from Fedora or EL 8/9 + EPEL repositories:
