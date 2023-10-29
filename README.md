@@ -9,6 +9,39 @@ to quickly check an entire repository/compose for typical release manager's
 errors like missing signatures or wrong branding.
 
 
+## Install
+
+All requirements are available from Fedora or EL 8/9 + EPEL repositories:
+
+```
+# EL 9 derivatives
+$ sudo dnf install -y --enablerepo=epel python3-createrepo_c \
+      python3-cryptography python3-rpm python3-schema python3-pyyaml \
+      python3-virtualenv
+```
+
+Currently, there is no RPM package available, so the recommended way is to
+install rpmqc from PyPI using a virtual environment:
+
+```shell
+$ mkdir rpmqc
+$ cd rpmqc
+$ virtualenv --system-site-packages .venv
+$ . venv/bin/activate
+$ pip install rpmqc
+
+$ rpmqc --version
+rpmqc 0.0.4
+```
+
+optionally, you can create an `rpmqc` alias in your `~/.bashrc`:
+
+```shell
+# don't forget to adjust the path accordingly to your configuration
+alias rpmqc="rpmqc/.venv/bin/rpmqc"
+```
+
+
 ## Configuration
 
 The program expects a configuration file in YAML format:

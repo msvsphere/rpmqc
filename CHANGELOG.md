@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add a configuration file example to the README.
 - Improve the project's description in the README.
+- Add installation instructions to the README.
+
 
 ### Fixed
 
