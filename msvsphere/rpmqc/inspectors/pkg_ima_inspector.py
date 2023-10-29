@@ -39,9 +39,10 @@ class PkgIMASignatureInspector(PkgBaseInspector):
                             pkg.hdr['payloadcompressor'])) as payload, \
                 closing(files.archive(payload)) as archive:
             for f in archive:
-                if stat.S_ISDIR(f.mode) or stat.S_ISLNK(f.mode):
+                if stat.S_ISDIR(f.mode) or stat.S_ISLNK(f.mode) or \
+                        not archive.hascontent():
                     # skip directories and symlinks because IMA operates only
-                    # on files
+                    # on files, also skip hardlink records
                     continue
                 elif f.imasig is None:
                     reporter.failed(test_case, {

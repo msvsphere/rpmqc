@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Make the "package.tags" section optional in a configuration file.
+- Fix hardlinks handling in the IMA signatures inspector.
 
 
 ## [0.0.3] - 2023-10-29
