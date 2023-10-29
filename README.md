@@ -39,3 +39,7 @@ version of the license.
 * [The Test Anything Protocol v14 specification](https://testanything.org/tap-version-14-specification.html)
 * [The RPM Package Manager](https://github.com/rpm-software-management/rpm)
 * [IMA Wiki](https://sourceforge.net/p/linux-ima/wiki/Home/)
+* [rpmlint](https://github.com/rpm-software-management/rpmlint) - 
+  a tool for checking common errors in RPM packages.
+* [rpminspect](https://github.com/rpminspect/rpminspect) - 
+  an RPM build deviation analysis tool.
