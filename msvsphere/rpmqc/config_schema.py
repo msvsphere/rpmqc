@@ -16,7 +16,7 @@ StrOrRegex = Or(
 
 ConfigSchema = Schema({
     'package': {
-        Optional('signatures'): {
+        Optional('signatures', default={}): {
             Optional('pgp_key_id'): And(
                 str, Use(str.lower), lambda s: len(s) in (8, 16),
                 error='PGP key ID length should be either 8 or 16 characters'

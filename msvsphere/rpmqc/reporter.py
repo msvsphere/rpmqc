@@ -20,6 +20,7 @@ class ReporterTap:
         self._output = sys.stdout
         self.failed_count = 0
         self.passed_count = 0
+        self.skipped_count = 0
 
     def counter(fn):
         @functools.wraps(fn)
@@ -42,6 +43,13 @@ class ReporterTap:
         self.passed_count += 1
         self._render(True, description, payload)
 
+    @counter
+    def skipped(self, description: str,
+                payload: Union[dict, 'ReporterTap', None] = None,
+                reason: Optional[str] = None):
+        self.skipped_count += 1
+        self._render(True, description, payload, skip=True, reason=reason)
+
     def init_subtest(self, description: Optional[str] = None) -> 'ReporterTap':
         self._output.write(f'{self._indent}# Subtest')
         if description:
@@ -56,12 +64,17 @@ class ReporterTap:
             self.passed(subtest._description)
 
     def _render(self, success: bool, description: str,
-                payload: Union[dict, 'ReporterTap', None] = None):
+                payload: Union[dict, 'ReporterTap', None] = None,
+                skip: bool = False, reason: Optional[str] = None):
         # print the test plan row if we know the final tests count
         if self._i == 1 and self._tests_count is not None:
             self.print_plan(self._tests_count)
         status = 'ok' if success else 'not ok'
         self._output.write(f'{self._indent}{status} {self._i} - {description}')
+        if skip:
+            self._output.write(' # SKIP')
+            if reason:
+                self._output.write(f' {reason}')
         self._output.write('\n')
         if payload:
             yaml_str = yaml.dump(payload, explicit_start=True,

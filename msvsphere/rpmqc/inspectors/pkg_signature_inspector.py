@@ -16,6 +16,9 @@ class PkgSignatureInspector(PkgBaseInspector):
         self.pgp_digest_algo = sign_cfg.get('pgp_digest_algo')
 
     def inspect(self, pkg: RPMPackage, reporter: ReporterTap):
+        if not self.pgp_key_id:
+            reporter.skipped('PGP signature', reason='no PGP key configured')
+            return
         digest_algo, key_id = pkg.signature
         test_case = (f'PGP signature is {self.pgp_key_id} '
                      f'({self.pgp_digest_algo})')

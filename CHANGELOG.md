@@ -9,11 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Implement tests skipping in the TAP reporter.
 - Exit with a non-zero exit code if some tests failed.
 - Use pytest-compatible exit codes.
 
 ### Fixed
 
+- Skip PGP signature tests instead of failing if PGP key id is not specified in
+  a configuration file.
 - Remove second "Inspector" word from the inspector class names.
 
 
