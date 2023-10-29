@@ -27,7 +27,7 @@ install rpmqc from PyPI using a virtual environment:
 $ mkdir rpmqc
 $ cd rpmqc
 $ virtualenv --system-site-packages .venv
-$ . venv/bin/activate
+$ . .venv/bin/activate
 $ pip install rpmqc
 
 $ rpmqc --version
