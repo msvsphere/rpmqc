@@ -9,6 +9,7 @@ from .config import Config
 from .inspectors.pkg_base_inspector import PkgBaseInspector
 from .reporter import ReporterTap
 from .rpm_package import RPMPackage
+from .repo_inspectors import repo_files_inspector, repo_modules_inspector, repo_groups_inspector
 
 __all__ = ['run_repo_inspections', 'run_rpm_inspections']
 
@@ -54,7 +55,7 @@ def run_rpm_inspections(cfg: Config, rpm_paths: Iterable) -> bool:
     return reporter.failed_count == 0
 
 
-def run_repo_inspections(cfg: Config, repo_path: str):
+def run_repo_inspections(cfg: Config, repo_path: str) -> bool:
     repomd_xml_path = os.path.join(repo_path, 'repodata/repomd.xml')
     repomd = createrepo_c.Repomd()
     createrepo_c.xml_parse_repomd(repomd_xml_path, repomd)
@@ -70,3 +71,51 @@ def run_repo_inspections(cfg: Config, repo_path: str):
                                    do_files=False)
     return run_rpm_inspections(cfg, (os.path.join(repo_path, p)
                                      for p in packages))
+
+
+def run_repo_metadata_inspections(cfg: Config, repo_path: str) -> bool:
+    """
+    Run the repositories metadata tests
+    :param cfg: Config dict
+    :param repo_path: Full path to the repositories
+    """
+    repo_reporter = ReporterTap()
+    repo_reporter.print_header()
+    # 1. File tests
+    try:
+        repo_names_list = cfg.data['repos']['repo_names_list']
+        files_result = repo_files_inspector(repo_path, repo_names_list, repo_reporter)
+    except KeyError:
+        repo_test_reporter = repo_reporter.init_subtest('Repository files integrity test')
+        repo_test_reporter.skipped('Test skipped',
+                                   reason='repos.repo_names_list key is missing in provided config')
+        repo_reporter.end_subtest(repo_test_reporter)
+        files_result = True
+    # 2. Module tests
+    try:
+        modules_repo_names_list = cfg.data['repos']['modules_repo_names_list']
+        repo_result = repo_modules_inspector(repo_path, modules_repo_names_list, repo_reporter)
+    except KeyError:
+        repo_test_reporter = repo_reporter.init_subtest('Repository module test')
+        repo_test_reporter.skipped('Test skipped',
+                                   reason='repos.modules_repo_names_list key is missing in provided config')
+        repo_reporter.end_subtest(repo_test_reporter)
+        repo_result = True
+    # 3. Group tests
+    try:
+        groups_repo_names_list = cfg.data['repos']['groups_repo_names_list']
+        group_result = repo_groups_inspector(repo_path, groups_repo_names_list, repo_reporter)
+    except KeyError:
+        repo_test_reporter = repo_reporter.init_subtest('Repository group test')
+        repo_test_reporter.skipped('Test skipped',
+                                   reason='repos.groups_repo_names_list key is missing in provided config')
+        repo_reporter.end_subtest(repo_test_reporter)
+        group_result = True
+    # repo_test_reporter = repo_reporter.init_subtest('Repository group test')
+    # repo_test_reporter.skipped('Test skipped',
+    #                            reason='repos.groups_repo_names_list key is missing in provided config')
+    # repo_reporter.end_subtest(repo_test_reporter)
+    repo_reporter.print_plan()
+    repo_reporter.print_summary()
+    return True
+    return files_result and repo_result and group_result

@@ -14,6 +14,10 @@ StrOrRegex = Or(
 )
 
 
+def comma_str_to_list(comma_str: str) -> list:
+    return comma_str.split(',')
+
+
 ConfigSchema = Schema({
     'package': {
         Optional('signatures', default={}): {
@@ -34,5 +38,16 @@ ConfigSchema = Schema({
             Optional('packager'): StrOrRegex,
             Optional('vendor'): StrOrRegex
         }
+    },
+    'repos': {
+        Optional('repo_names_list'): And(
+            str, Use(comma_str_to_list)
+        ),
+        Optional('modules_repo_names_list'): And(
+            str, Use(comma_str_to_list)
+        ),
+        Optional('groups_repo_names_list'): And(
+            str, Use(comma_str_to_list)
+        )
     }
 })

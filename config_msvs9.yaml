@@ -1,0 +1,20 @@
+---
+package:
+  signatures:
+    # expected RPM package signature PGP key id
+    pgp_key_id: 00000000
+    # IMA signature public certificate path
+    ima_cert_path: /tmp/msvsphereima.x509
+  tags:
+    # expected RPM tag values, regular expressions are also supported
+    buildhost: !regex ^builder-(x86|arm64)-\d+\.(msvsphere-os|inferitos)\.ru$
+    packager: MSVSphere
+    vendor: MSVSphere
+repos:
+  # Repo names list for test in inspect-repo-metadata command
+  # repo_names_list: AppStream,BaseOS,CRB,Devel,Extras,HighAvailability,NFV,RT,ResilientStorage,Testing
+  # BaseOS, Extras,HighAvailability,RT - are not module repos
+  modules_repo_names_list: AppStream,CRB
+  # Repo names list for group (comps.xml) test
+  groups_repo_names_list: AppStream,BaseOS,CRB,Extras,HighAvailability,NFV,RT,ResilientStorage,Testing
+
