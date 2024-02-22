@@ -71,6 +71,19 @@ package:
     buildhost: !regex ^builder-(x86|arm64)-\d+\.msvsphere-os\.ru$
     packager: MSVSphere
     vendor: MSVSphere
+repos:
+  # Repo names list (comma-separated, spaces/tabs are ignoring) for test in inspect-repo-metadata command
+  repo_names_list: AppStream,BaseOS,CRB,Devel,Extras,HighAvailability,NFV,RT,ResilientStorage,Testing
+  # BaseOS, Extras,HighAvailability,RT - are not module repos
+  modules_repo_names_list: AppStream,CRB
+  # Repo names list (comma-separated, spaces/tabs are ignoring) for group (comps.xml) test
+  groups_repo_names_list: AppStream,BaseOS,CRB,Extras,HighAvailability,NFV,RT,ResilientStorage,Testing
+  # PGP key id and repo comma-separated list (spaces/tabs are ignoring) to check repomd.xml signature
+  repomd_xml_pgp_repos_list: AppStream,BaseOS,CRB,Devel,Extras,HighAvailability,NFV,RT,ResilientStorage,Testing
+  # 8-chars key
+  repomd_xml_pgp_key_id: 1234567A
+  # or 16-chars key
+  # repomd_xml_pgp_key_id: FC04544B24295656
 ...
 ```
 
