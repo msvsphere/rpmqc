@@ -60,8 +60,10 @@ class ReporterTap:
     def end_subtest(self, subtest: 'ReporterTap'):
         if subtest.failed_count:
             self.failed(subtest._description)
-        else:
+        if subtest.passed_count:
             self.passed(subtest._description)
+        if subtest.skipped_count:
+            self.skipped(subtest._description)
 
     def _render(self, success: bool, description: str,
                 payload: Union[dict, 'ReporterTap', None] = None,

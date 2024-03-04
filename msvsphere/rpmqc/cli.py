@@ -6,7 +6,7 @@ import traceback
 from . import __version__
 from .config import Config
 from .file_utils import normalize_path
-from .runner import run_repo_inspections, run_rpm_inspections
+from .runner import run_repo_inspections, run_rpm_inspections, run_repo_metadata_inspections
 
 
 class ExitCodes(IntEnum):
@@ -70,6 +70,15 @@ def init_arg_parser() -> ArgParser:
     inspect_rpm_cmd.add_argument('rpm_path', metavar='RPM_PATH', nargs='+',
                                  type=normalize_path,
                                  help='path to RPM(s) under test')
+    # Repository metadata inspection subcommand
+    inspect_metadata_cmd = commands.add_parser(
+        'inspect-repo-metadata', help='inspect a repository metadata',
+        description='Runs inspections for a repository metadata'
+    )
+    inspect_metadata_cmd.add_argument('-c', '--config', required=True,
+                                      help='configuration file path')
+    inspect_metadata_cmd.add_argument('repo_path', type=normalize_path,
+                                      help='path to repository to test')
     return parser
 
 
@@ -83,6 +92,8 @@ def main():
             success = run_repo_inspections(cfg, args.repo_path)
         elif args.command == 'inspect-rpm':
             success = run_rpm_inspections(cfg, args.rpm_path)
+        elif args.command == 'inspect-repo-metadata':
+            success = run_repo_metadata_inspections(cfg, args.repo_path)
     except KeyboardInterrupt:
         sys.stderr.write('rpmqc: interrupted by user\n')
         sys.exit(ExitCodes.INTERRUPTED)

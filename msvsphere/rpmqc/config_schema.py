@@ -14,12 +14,33 @@ StrOrRegex = Or(
 )
 
 
+def comma_str_to_list(comma_str: str) -> list:
+    """
+    Converts a comma separated string to a list of string.
+    Examples:
+     - 'AppStream,BaseOS,CRB' --> ['AppStream', 'BaseOS', 'CRB']
+     - 'AppStream, BaseOS, CRB' --> ['AppStream', 'BaseOS', 'CRB']
+    :param comma_str: Input string
+    :return: list of string
+    """
+    return [s.strip() for s in comma_str.split(',')]
+
+
+def string_or_number_to_lower_string(input_sn: str) -> str:
+    """
+    Converts a string or number to string in lower case
+    :param input_sn: String or number to convert
+    :return:
+    """
+    return str(input_sn).lower()
+
+
 ConfigSchema = Schema({
     'package': {
         Optional('signatures', default={}): {
             Optional('pgp_key_id'): And(
-                str, Use(str.lower), lambda s: len(s) in (8, 16),
-                error='PGP key ID length should be either 8 or 16 characters'
+                Or(str, int), Use(string_or_number_to_lower_string), lambda s: len(s) in (8, 16),
+                error='RPM packages PGP key ID length should be either 8 or 16 characters'
             ),
             Optional('pgp_digest_algo', default='RSA/SHA256'): And(
                 str, Use(str.upper)
@@ -34,5 +55,23 @@ ConfigSchema = Schema({
             Optional('packager'): StrOrRegex,
             Optional('vendor'): StrOrRegex
         }
+    },
+    'repos': {
+        Optional('repo_names_list'): And(
+            str, Use(comma_str_to_list)
+        ),
+        Optional('modules_repo_names_list'): And(
+            str, Use(comma_str_to_list)
+        ),
+        Optional('groups_repo_names_list'): And(
+            str, Use(comma_str_to_list)
+        ),
+        Optional('repomd_xml_pgp_repos_list'): And(
+            str, Use(comma_str_to_list)
+        ),
+        Optional('repomd_xml_pgp_key_id'): And(
+            Or(str, int), Use(string_or_number_to_lower_string), lambda s: len(str(s)) in (8, 16),
+            error='repomd.xml PGP key ID length should be either 8 or 16 characters'
+        )
     }
 })
